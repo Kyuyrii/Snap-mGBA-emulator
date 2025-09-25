@@ -18,7 +18,7 @@ apps:
     common-id: io.mgba.mGBA
     extensions: [kde-neon-6]
     environment:
-      QT_QPA_PLATFORMTHEME: kde
+      QT_QPA_PLATFORMTHEME: ""
     plugs:
       - unity7
       - screen-inhibit-control
@@ -31,9 +31,27 @@ apps:
       - joystick
       - bluez
 
+  kvantum:
+    command: usr/bin/kvantummanager
+    extensions: [kde-neon-6]
+    environment:
+      QT_QPA_PLATFORMTHEME: ""
+    plugs:
+      - home
+
 plugs:
   shared-memory:
     private: true
+
+layout:
+  /usr/share/color-schemes:
+    symlink: $SNAP/usr/share/color-schemes
+  /usr/share/Kvantum:
+    symlink: $SNAP/usr/share/Kvantum
+  /usr/share/kvantummanager/translations:
+    symlink: $SNAP/usr/share/kvantummanager/translations
+  /usr/share/kvantumpreview/translations:
+    symlink: $SNAP/usr/share/kvantumpreview/translations
 
 package-repositories:
   - type: apt
@@ -69,3 +87,22 @@ parts:
     prime:
       - usr/lib/x86_64-linux-gnu/libSDL2-2.0.so*
       - usr/lib/x86_64-linux-gnu/libdecor-0.so*
+
+  kvantum:
+    after: [dependencies]
+    plugin: nil
+    source: https://github.com/tsujan/Kvantum.git
+    source-tag: V1.1.5
+    build-packages:
+      - cmake
+      - make
+    override-build: |
+      cd Kvantum
+      mkdir build
+      cd build
+      cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+      make
+      make install DESTDIR=$CRAFT_PART_INSTALL
+      mkdir -p $CRAFT_PART_INSTALL/usr/lib/x86_64-linux-gnu/qt6/plugins/styles/
+      mv -f $CRAFT_PART_INSTALL/snap/kde-qt6-core24-sdk/current/usr/lib/x86_64-linux-gnu/qt6/plugins/styles/libkvantum.so $CRAFT_PART_INSTALL/usr/lib/x86_64-linux-gnu/qt6/plugins/styles/
+      rm -r $CRAFT_PART_INSTALL/snap/kde-qt6-core24-sdk/
