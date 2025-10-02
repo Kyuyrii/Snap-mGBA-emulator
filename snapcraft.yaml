@@ -1,0 +1,71 @@
+name: mgba-emulator
+base: core24
+version: '0.11'
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+summary: Nintendo Game Boy Advance Emulator
+description: |
+  mGBA is an emulator for running Game Boy Advance games. It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack. It also supports Game Boy and Game Boy Color games.
+grade: stable
+confinement: strict
+
+apps:
+  mgba-emulator:
+    command: usr/bin/mgba-qt
+    desktop: usr/share/applications/io.mgba.mGBA.desktop
+    common-id: io.mgba.mGBA
+    extensions: [kde-neon-6]
+    environment:
+      QT_QPA_PLATFORMTHEME: ""
+    plugs:
+      - unity7
+      - screen-inhibit-control
+      - audio-playback
+      - network
+      - network-bind
+      - home
+      - removable-media
+      - mount-observe
+      - joystick
+      - bluez
+
+plugs:
+  shared-memory:
+    private: true
+
+package-repositories:
+  - type: apt
+    url: http://origin.archive.neon.kde.org/user
+    suites: [noble]
+    components: [main]
+    architectures: [amd64]
+    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+
+parts:
+  mgba:
+    plugin: cmake
+    source: https://github.com/mgba-emu/mgba.git
+    #source-tag: $SNAPCRAFT_PROJECT_VERSION
+    build-packages:
+      - libsdl2-dev
+      - libsqlite3-dev
+      - libelf-dev
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+    override-build: |
+      craftctl default
+      sed -e 's|Exec=mgba-qt %f|Exec=${SNAP}/usr/bin/mgba-qt %f|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
+      sed -e 's|Icon=io.mgba.mGBA|Icon=${SNAP}/usr/share/icons/hicolor/512x512/apps/io.mgba.mGBA.png|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
+      sed -e 's|Name=mGBA|Name=mGBA [NyKyu]|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
+
+  dependencies:
+    after: [mgba]
+    plugin: nil
+    stage-packages:
+      - libsdl2-2.0-0
+      - libdecor-0-0
+    prime:
+      - usr/lib/x86_64-linux-gnu/libSDL2-2.0.so*
+      - usr/lib/x86_64-linux-gnu/libdecor-0.so*
