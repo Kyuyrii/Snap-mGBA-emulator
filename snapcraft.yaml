@@ -18,7 +18,7 @@ apps:
     common-id: io.mgba.mGBA
     extensions: [kde-neon-6]
     environment:
-      QT_QPA_PLATFORMTHEME: ""
+      QT_QPA_PLATFORMTHEME: kde
     plugs:
       - unity7
       - screen-inhibit-control
