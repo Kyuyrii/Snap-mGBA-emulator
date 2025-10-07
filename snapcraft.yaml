@@ -43,7 +43,7 @@ package-repositories:
     url: http://origin.archive.neon.kde.org/user
     suites: [noble]
     components: [main]
-    architectures: [amd64]
+    architectures: [amd64, arm64]
     key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
 
 parts:
