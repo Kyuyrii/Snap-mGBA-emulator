@@ -1,6 +1,7 @@
 name: mgba-emulator
 base: core24
-version: '0.11'
+# version: '0.11'
+adopt-info: mgba
 platforms:
   amd64:
     build-on: [amd64]
@@ -75,6 +76,7 @@ parts:
       sed -e 's|Exec=mgba-qt %f|Exec=${SNAP}/usr/bin/mgba-qt %f|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
       sed -e 's|Icon=io.mgba.mGBA|Icon=${SNAP}/usr/share/icons/hicolor/512x512/apps/io.mgba.mGBA.png|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
       sed -e 's|Name=mGBA|Name=mGBA [NyKyu]|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
+      craftctl set version=$(date +%Y-%m-%d)
 
   dependencies:
     after: [mgba]
