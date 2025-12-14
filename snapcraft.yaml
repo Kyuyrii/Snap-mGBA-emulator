@@ -69,6 +69,12 @@ parts:
       - libsdl2-dev
       - libsqlite3-dev
       - libelf-dev
+      - libedit-dev
+      - libzip-dev
+      - libproxy-dev
+      - zipcmp
+      - zipmerge
+      - ziptool
     cmake-parameters:
       - -DCMAKE_INSTALL_PREFIX=/usr
     override-build: |
