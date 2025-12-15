@@ -22,7 +22,8 @@ apps:
     common-id: io.mgba.mGBA
     extensions: [kde-neon-6]
     environment:
-      QT_QPA_PLATFORMTHEME: xdgdesktopportal
+      QT_QPA_PLATFORMTHEME: kde
+      QT_STYLE_OVERRIDE: kvantum
       LD_LIBRARY_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
       QT_PLUGIN_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
     plugs:
