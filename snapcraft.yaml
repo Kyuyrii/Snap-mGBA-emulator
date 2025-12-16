@@ -22,8 +22,7 @@ apps:
     common-id: io.mgba.mGBA
     extensions: [kde-neon-6]
     environment:
-      QT_QPA_PLATFORMTHEME: kde
-      QT_STYLE_OVERRIDE: kvantum
+      QT_QPA_PLATFORMTHEME: xdgdesktopportal
       LD_LIBRARY_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
       QT_PLUGIN_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
     plugs:
@@ -78,6 +77,7 @@ parts:
       - ziptool
     cmake-parameters:
       - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DUSE_PNG=OFF
     override-build: |
       craftctl default
       sed -e 's|Exec=mgba-qt %f|Exec=${SNAP}/usr/bin/mgba-qt %f|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
