@@ -1,7 +1,7 @@
 name: mgba-emulator
 base: core24
 # version: '0.11'
-adopt-info: mgba
+adopt-info: mgba-app
 platforms:
   amd64:
     build-on: [amd64]
@@ -11,9 +11,12 @@ platforms:
     build-for: [arm64]
 summary: Nintendo Game Boy Advance Emulator
 description: |
-  mGBA is an emulator for running Game Boy Advance games. It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack. It also supports Game Boy and Game Boy Color games.
+  mGBA is an emulator for running Game Boy Advance games.
+  It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack.
+  It also supports Game Boy and Game Boy Color games.
 grade: stable
 confinement: strict
+icon: mgba-1024.png
 
 apps:
   mgba-emulator:
@@ -23,8 +26,8 @@ apps:
     extensions: [kde-neon-6]
     environment:
       QT_QPA_PLATFORMTHEME: xdgdesktopportal
-      LD_LIBRARY_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
-      QT_PLUGIN_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
+      LD_LIBRARY_PATH: $SNAP/lxqt-support-core24/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
+      QT_PLUGIN_PATH: $SNAP/lxqt-support-core24/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
     plugs:
       - unity7
       - screen-inhibit-control
@@ -40,28 +43,20 @@ apps:
 plugs:
   shared-memory:
     private: true
-  lxqt-support:
-    content: lxqt-support
+  lxqt-support-core24:
+    content: lxqt-support-core24
     interface: content
-    target: $SNAP/lxqt-support
-    default-provider: lxqt-support
+    target: $SNAP/lxqt-support-core24
+    default-provider: lxqt-support-core24
 
 layout:
   /usr/share/color-schemes:
-    symlink: $SNAP/lxqt-support/usr/share/color-schemes
+    symlink: $SNAP/lxqt-support-core24/usr/share/color-schemes
   /usr/share/Kvantum:
-    symlink: $SNAP/lxqt-support/usr/share/Kvantum
-
-package-repositories:
-  - type: apt
-    url: http://origin.archive.neon.kde.org/user
-    suites: [noble]
-    components: [main]
-    architectures: [amd64, arm64]
-    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+    symlink: $SNAP/lxqt-support-core24/usr/share/Kvantum
 
 parts:
-  mgba:
+  mgba-app:
     plugin: cmake
     source: https://github.com/mgba-emu/mgba.git
     #source-tag: $SNAPCRAFT_PROJECT_VERSION
@@ -80,13 +75,11 @@ parts:
       - -DUSE_PNG=OFF
     override-build: |
       craftctl default
-      sed -e 's|Exec=mgba-qt %f|Exec=${SNAP}/usr/bin/mgba-qt %f|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
-      sed -e 's|Icon=io.mgba.mGBA|Icon=${SNAP}/usr/share/icons/hicolor/512x512/apps/io.mgba.mGBA.png|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
-      sed -e 's|Name=mGBA|Name=mGBA [NyKyu]|' -i  $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
+      sed -i 's|Name=mGBA|Name=mGBA [Kyu]|' $CRAFT_PART_INSTALL/usr/share/applications/io.mgba.mGBA.desktop
       craftctl set version=$(date +%Y-%m-%d)
 
   dependencies:
-    after: [mgba]
+    after: [mgba-app]
     plugin: nil
     stage-packages:
       - libsdl2-2.0-0
