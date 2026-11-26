@@ -74,3 +74,8 @@ parts:
     prime:
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libSDL2-2.0.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor-0.so*
+
+  command-chain:
+    after: [dependencies]
+    plugin: dump
+    source: $CRAFT_PROJECT_DIR/sh
